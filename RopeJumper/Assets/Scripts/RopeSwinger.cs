@@ -8,7 +8,7 @@ public class RopeSwinger : MonoBehaviour
 
     private Rigidbody2D _playerBody;
     private Coroutine _swing;
-    private int _roundingHundredthsFactor = 100;
+    private const int _roundingHundredthsFactor = 100;
 
     private void OnEnable()
     {
