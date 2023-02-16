@@ -8,7 +8,7 @@ public class RopeSwinger : MonoBehaviour
 
     private Rigidbody2D _playerBody;
     private Coroutine _swing;
-    private int _roundingFactor = 1;
+    private int _roundingHundredthsFactor = 100;
 
     private void OnEnable()
     {
@@ -31,10 +31,9 @@ public class RopeSwinger : MonoBehaviour
     {
         while (true) 
         {
-            _roundingFactor = 1;
-            float roundedYVelocity = Mathf.RoundToInt(_playerBody.velocity.y * _roundingFactor) / _roundingFactor;
-            _roundingFactor = 100;
-            float roundedXVelocity = Mathf.RoundToInt(_playerBody.velocity.x * _roundingFactor) / _roundingFactor;
+            float roundedYVelocity = Mathf.RoundToInt(_playerBody.velocity.y);
+            float roundedXVelocity = Mathf.RoundToInt(_playerBody.velocity.x * _roundingHundredthsFactor) / _roundingHundredthsFactor;
+
             if (roundedYVelocity == 0 && roundedXVelocity != 0)
                 _playerBody.velocity = _playerBody.velocity.normalized * _startSpeed;
 
