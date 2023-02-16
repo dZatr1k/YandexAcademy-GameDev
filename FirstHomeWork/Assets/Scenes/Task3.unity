@@ -1417,7 +1417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _startSpeed: 10
-  _boostSpeed: 2
+  _boostSpeed: 5
 --- !u!233 &1692949524
 HingeJoint2D:
   m_ObjectHideFlags: 0
