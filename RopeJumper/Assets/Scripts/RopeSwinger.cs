@@ -30,7 +30,7 @@ public class RopeSwinger : MonoBehaviour
         while (true) 
         {
             int roundingFactor = 1;
-            float roundedYVelocity = Mathf.RoundToInt(_playerBody.velocity.y * roundingFactor);
+            float roundedYVelocity = Mathf.RoundToInt(_playerBody.velocity.y * roundingFactor) / roundingFactor;
             roundingFactor = 100;
             float roundedXVelocity = Mathf.RoundToInt(_playerBody.velocity.x * roundingFactor) / roundingFactor;
             if (roundedYVelocity == 0 && roundedXVelocity != 0)
