@@ -9,6 +9,12 @@ public class Hooker : MonoBehaviour
     private Player _player;
     private HingeJoint2D _hinge;
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.GetComponent<LastRopeSegment>())
+            TryHook(collision.GetComponent<Rigidbody2D>());
+    }
+
     private void Start()
     {
         _player = GetComponent<Player>();
