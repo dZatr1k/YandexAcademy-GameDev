@@ -1,42 +1,31 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Player), typeof(HingeJoint2D))]
 public class Hooker : MonoBehaviour
 {
     public static UnityAction Hooked;
 
-    [SerializeField] private Rigidbody2D _ropeBody;
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent(out Player player))
-        {
-            TryHook(player);
-        }
-    }
+    private Player _player;
+    private HingeJoint2D _hinge;
 
     private void Start()
     {
-        _ropeBody = GetComponent<Rigidbody2D>();
+        _player = GetComponent<Player>();
+        _hinge = GetComponent<HingeJoint2D>();
     }
 
-    private void TryHook(Player player)
+    public void TryHook(Rigidbody2D ropeBody)
     {
-        if (player.IsHooked)
+        if (_player.IsHooked)
             return;
 
-        player.TryGetComponent(out HingeJoint2D joint);
-
-        if (joint == null)
-            return;
-
-        GetComponent<BoxCollider2D>().enabled = false;
-        if (player.LastHinge != null)
-            player.LastHinge.GetComponent<BoxCollider2D>().enabled = true;
-        player.IsHooked = true;
-        joint.enabled = true;
-        joint.connectedBody = _ropeBody;
+        ropeBody.GetComponent<BoxCollider2D>().enabled = false;
+        if (_player.LastHinge != null)
+            _player.LastHinge.GetComponent<BoxCollider2D>().enabled = true;
+        _player.IsHooked = true;
+        _hinge.enabled = true;
+        _hinge.connectedBody = ropeBody;
         Hooked.Invoke();
     }
 }
