@@ -11,8 +11,11 @@ public class Hooker : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<LastRopeSegment>())
-            TryHook(collision.GetComponent<Rigidbody2D>());
+        if (collision.TryGetComponent(out LastRopeSegment lastRopeSegment)) 
+        {
+            collision.TryGetComponent(out Rigidbody2D ropeBody);
+            TryHook(ropeBody);
+        }
     }
 
     private void Start()
