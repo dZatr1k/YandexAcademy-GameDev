@@ -20,7 +20,8 @@ public class Slide : MonoBehaviour
     private List<RaycastHit2D> _hitBufferList = new List<RaycastHit2D>(16);
 
     private const float MinMoveDistance = 0.001f;
-    private const float ShellRadius = 0.01f;
+    private const float ShellRadius = 0.1f;
+    private const float Ratio = 180 / Mathf.PI;
 
     private void OnEnable()
     {
@@ -38,7 +39,8 @@ public class Slide : MonoBehaviour
     {
         Vector2 alongSurface = Vector2.Perpendicular(_groundNormal);
 
-        _targetVelocity = alongSurface * _speed;
+        float angle = Vector2.SignedAngle(Vector2.right, alongSurface);
+        _targetVelocity = -Mathf.Sin(angle * Ratio) * alongSurface * _speed;
     }
 
     private void FixedUpdate()
@@ -75,13 +77,13 @@ public class Slide : MonoBehaviour
         if (currentNormal.y > _minGroundNormalY)
         {
             _grounded = true;
+
             if (yMovement)
             {
                 _groundNormal = currentNormal;
                 currentNormal.x = 0;
             }
         }
-
         float projection = Vector2.Dot(_velocity, currentNormal);
         if (projection < 0)
             _velocity = _velocity - projection * currentNormal;
@@ -98,7 +100,7 @@ public class Slide : MonoBehaviour
             int count = _body.Cast(move, _contactFilter, _hitBuffer, distance + ShellRadius);
 
             RedefineHitBufferList(count);
-
+            
             for (int i = 0; i < _hitBufferList.Count; i++)
             {
                 float modifiedDistance = CalculateModifiedDistance(_hitBufferList[i], yMovement);
@@ -107,5 +109,13 @@ public class Slide : MonoBehaviour
         }
 
         _body.position = _body.position + move.normalized * distance;
+    }
+
+    public void TryJump() 
+    {
+        if(_grounded)
+        {
+
+        }
     }
 }
