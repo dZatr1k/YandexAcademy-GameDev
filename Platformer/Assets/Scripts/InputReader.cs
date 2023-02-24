@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class InputReader : MonoBehaviour
@@ -8,6 +6,7 @@ public class InputReader : MonoBehaviour
 
     private void Update()
     {
-        
+        if (Input.GetKeyDown("space"))
+            _slide.TryJump();
     }
 }

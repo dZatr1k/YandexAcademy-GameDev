@@ -46,6 +46,7 @@ public class Slide : MonoBehaviour
     private void FixedUpdate()
     {
         _velocity += _gravityModifier * Physics2D.gravity * Time.fixedDeltaTime;
+        
         _velocity.x = _targetVelocity.x;
 
         _grounded = false;
@@ -115,7 +116,7 @@ public class Slide : MonoBehaviour
     {
         if(_grounded)
         {
-
+            _velocity = _jumpVelocity * _groundNormal;
         }
     }
 }
