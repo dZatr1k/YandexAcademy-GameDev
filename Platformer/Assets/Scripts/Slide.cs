@@ -43,7 +43,6 @@ public class Slide : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _velocity.y += _targetVelocity.y;
         _velocity += _gravityModifier * Physics2D.gravity * Time.fixedDeltaTime;
         _velocity.x = _targetVelocity.x;
 
