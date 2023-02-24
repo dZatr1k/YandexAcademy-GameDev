@@ -6,7 +6,7 @@ public class InputReader : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown("space"))
+        if (Input.GetKeyDown(KeyCode.Space))
             _slide.TryJump();
     }
 }
