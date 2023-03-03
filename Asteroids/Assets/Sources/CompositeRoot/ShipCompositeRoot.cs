@@ -32,7 +32,7 @@ namespace CompositeRoot
             _baseGun = new DefaultGun();
             _laserGun = new LaserGun(10);
 
-            _shipModel = new Ship(new Vector2(0.5f, 0.5f), 0);
+            _shipModel = new Ship(new Vector2(0.5f, 0.5f), 0, Config.ShipHealth);
             _shipMovement = new ShipMovement(_shipModel);
             _shipInputRouter = new ShipInputRouter(_shipMovement)
                 .BindGunToFirstSlot(_baseGun)
