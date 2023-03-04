@@ -24,13 +24,12 @@ namespace Asteroids.Model
             _variants = new Func<Enemy>[]
             {
                 CreateAsteroid,
-                CreateNlo,
                 CreateBlueMember,
-                CreareRedMember
+                CreateRedMember
             };
 
-            _blueTeam = new List<Nlo>();
-            _redTeam = new List<Nlo>();
+            _blueTeam = new List<Nlo>(1);
+            _redTeam = new List<Nlo>(1);
         }
 
         public void FillTestQueue()
@@ -43,14 +42,11 @@ namespace Asteroids.Model
                     _queue.Start(_variants[0], stacks * 2, (factory) => _simulation.Simulate(factory.Invoke()));
             }
 
-            _queue.Start(_variants[1], 1, (factory) => _simulation.Simulate(factory.Invoke()));
-            _queue.Start(_variants[1], 7, (factory) => _simulation.Simulate(factory.Invoke()));
-            _queue.Start(_variants[1], 7, (factory) => _simulation.Simulate(factory.Invoke()));
-            _queue.Start(_variants[1], 16, (factory) => _simulation.Simulate(factory.Invoke()));
-            _queue.Start(_variants[1], 25, (factory) => _simulation.Simulate(factory.Invoke()));
-
-            _queue.Start(_variants[2], 0.5f, (factory) => _simulation.Simulate(factory.Invoke()));
-            _queue.Start(_variants[3], 0.5f, (factory) => _simulation.Simulate(factory.Invoke()));
+            for (int i = 1; i < 10; i++)
+            {
+                _queue.Start(_variants[1], i, (factory) => _simulation.Simulate(factory.Invoke()));
+                _queue.Start(_variants[2], i, (factory) => _simulation.Simulate(factory.Invoke()));
+            }
         }
 
         public void Update(float deltaTime)
@@ -69,16 +65,11 @@ namespace Asteroids.Model
             return _blueTeam[_blueTeam.Count - 1];
         }
 
-        private Nlo CreareRedMember()
+        private Nlo CreateRedMember()
         {
             _redTeam.Add(new Nlo(TeamTag.red, _blueTeam[_blueTeam.Count - 1], GetRandomPositionOutsideScreen(), Config.NloSpeed));
             _blueTeam[_blueTeam.Count - 1].SetTarget(_redTeam[_redTeam.Count - 1]);
             return _redTeam[_blueTeam.Count - 1];
-        }
-
-        private Nlo CreateNlo()
-        {
-            return new Nlo(_player, GetRandomPositionOutsideScreen(), Config.NloSpeed);
         }
 
         private Asteroid CreateAsteroid()
