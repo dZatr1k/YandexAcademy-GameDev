@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,6 +13,9 @@ namespace Asteroids.Model
         private readonly Func<Enemy>[] _variants;
         private readonly Timers<Func<Enemy>> _queue = new Timers<Func<Enemy>>();
 
+        private List<Nlo> _blueTeam;
+        private List<Nlo> _redTeam;
+
         public EnemiesSpawner(EnemiesSimulation simulation, Transformable player)
         {
             _simulation = simulation;
@@ -21,8 +24,13 @@ namespace Asteroids.Model
             _variants = new Func<Enemy>[]
             {
                 CreateAsteroid,
-                CreateNlo
+                CreateNlo,
+                CreateBlueMember,
+                CreareRedMember
             };
+
+            _blueTeam = new List<Nlo>();
+            _redTeam = new List<Nlo>();
         }
 
         public void FillTestQueue()
@@ -40,6 +48,9 @@ namespace Asteroids.Model
             _queue.Start(_variants[1], 7, (factory) => _simulation.Simulate(factory.Invoke()));
             _queue.Start(_variants[1], 16, (factory) => _simulation.Simulate(factory.Invoke()));
             _queue.Start(_variants[1], 25, (factory) => _simulation.Simulate(factory.Invoke()));
+
+            _queue.Start(_variants[2], 0.5f, (factory) => _simulation.Simulate(factory.Invoke()));
+            _queue.Start(_variants[3], 0.5f, (factory) => _simulation.Simulate(factory.Invoke()));
         }
 
         public void Update(float deltaTime)
@@ -50,6 +61,19 @@ namespace Asteroids.Model
         private Vector2 GetRandomPositionOutsideScreen()
         {
             return Random.insideUnitCircle.normalized + new Vector2(0.5F, 0.5F);
+        }
+
+        private Nlo CreateBlueMember()
+        {
+            _blueTeam.Add(new Nlo(TeamTag.blue, null, GetRandomPositionOutsideScreen(), Config.NloSpeed));
+            return _blueTeam[_blueTeam.Count - 1];
+        }
+
+        private Nlo CreareRedMember()
+        {
+            _redTeam.Add(new Nlo(TeamTag.red, _blueTeam[_blueTeam.Count - 1], GetRandomPositionOutsideScreen(), Config.NloSpeed));
+            _blueTeam[_blueTeam.Count - 1].SetTarget(_redTeam[_redTeam.Count - 1]);
+            return _redTeam[_blueTeam.Count - 1];
         }
 
         private Nlo CreateNlo()
