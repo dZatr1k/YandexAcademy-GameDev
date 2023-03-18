@@ -10,6 +10,8 @@ public class Clickable : MonoBehaviour
     [SerializeField] private float _scaleTime = 0.25f;
     [SerializeField] private HitEffect _hitEffectPrefab;
     [SerializeField] private Resources _resources;
+    [SerializeField] private GameObject _smallCube;
+    [SerializeField] private Transform _spawnPoint;
 
     private int _coinsPerClick = 1;
 
@@ -17,8 +19,15 @@ public class Clickable : MonoBehaviour
     {
         HitEffect hitEffect = Instantiate(_hitEffectPrefab, transform.position, Quaternion.identity);
         hitEffect.Init(_coinsPerClick);
-        _resources.CollectCoins(1, transform.position);
+        Instantiate(_smallCube, _spawnPoint.position, Quaternion.identity);
         StartCoroutine(HitAnimation());
+    }
+
+    public void HitSmallCube()
+    {
+        _resources = FindObjectOfType<Resources>();
+        _resources.CollectCoins(1, transform.position);
+        Destroy(gameObject);
     }
 
     private IEnumerator HitAnimation()
